@@ -1,0 +1,20 @@
+{
+  "name": "portraittype",
+  "version": "1.0.0",
+  "authors": [
+    "Michael Dewberry <michael.dewberry@gmail>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "animate.css": "~3.2.0",
+    "google-diff-match-patch-js": "~1.0.0",
+    "Lettering.js": "~0.7.0"
+  }
+}

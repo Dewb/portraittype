@@ -1,0 +1,26 @@
+.div-left {
+	position: relative;
+	float: left;
+	width: 50%;
+	margin: 1;
+}
+
+.div-right {
+	position: relative;
+	float: right;
+	width: 50%;
+	margin: 0;
+}
+
+#poetry {
+	width: 80%;
+	height: 400px;
+}
+
+.poem_word {
+	color: white;
+}
+
+.long_word {
+	color: red;
+}
