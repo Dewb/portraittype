@@ -18,9 +18,15 @@
 }
 
 .poem_word {
-	color: white;
+	color: black;
 }
 
 .long_word {
-	color: red;
+	color: cyan;
+}
+
+body {
+	background-color: black;
+	font-size: 16pt;
+	font-family: 'Special Elite', helvetica, sans;
 }
