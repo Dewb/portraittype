@@ -59,17 +59,15 @@ $(document).ready(function() {
 	      		fadeWord = false;
 	      	}
 
-	      	if (drawWord && fadeWord) {
-	      		wordSpan.hide();
-			} else if (!drawWord) {
-				wordSpan.css('opacity', 0);
+	      	if (!drawWord || fadeWord) {
+	      		wordSpan.fadeTo(0, 0);
 			}
 
 	      	$('#displayarea').append(wordSpan);
 	      	
 	      	if (fadeWord && drawWord) {
 	      		updatesEnabled = false;
-	      		wordSpan.fadeIn(800, function () {
+	      		wordSpan.fadeTo(800, 1.0, function () {
 	      			updatesEnabled = true;
 	      			lastDirtyWord = undefined;
 	      			draw();
@@ -87,6 +85,10 @@ $(document).ready(function() {
 		if (updatesEnabled) {
 			draw();
 		}
+	});
+
+	$('#finish').bind('click', function() {
+		$(".poem_word").fadeTo(1800, 1.0);
 	});
 
 });

@@ -1,7 +1,7 @@
 .div-left {
 	position: relative;
 	float: left;
-	width: 50%;
+	width: 40%;
 	margin: 1;
 }
 
@@ -12,9 +12,22 @@
 	margin: 0;
 }
 
+#toolbar {
+	color: white;
+	margin: 10px;
+}
+
+#toolbar button {
+	float: right;
+}
+
 #poetry {
-	width: 80%;
+	width: 100%;
 	height: 400px;
+}
+
+#displayarea {
+	margin: 1em;
 }
 
 .poem_word {
