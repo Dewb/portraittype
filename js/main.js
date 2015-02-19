@@ -116,4 +116,7 @@ $(document).ready(function() {
                 $(".div-left").hide();
         });
 
+	$('#clear').bind('click', function() {
+		$('#poetry').val('');		
+	});
 });
