@@ -4,17 +4,17 @@ $(document).ready(function() {
 	var previousText = undefined;
 	var updatesEnabled = true;
 
+	var socket = io("http://talk.dewb.org", { 'path': '/poetry/socket.io' });
+
 	function getCursorPosition() {
 		var ta = $('#poetry');
 		return ta.prop("selectionDirection") == "backward" ? ta.prop("selectionStart") : ta.prop("selectionEnd");
 	}
 
-	function draw() {
-		var poem = $('#poetry').val();
-	    var cursorPosition = getCursorPosition();
+	function draw(poem, cursorPosition) {
 	    var contentChanged = previousText != poem;
       	
-      	$('#displayarea').empty();
+        $('#displayarea').empty();
       	var words = poem.match(/[ \t]+|\S+|\n/g);
       	if (words == undefined) { 
       		return;
@@ -82,13 +82,24 @@ $(document).ready(function() {
 	}
 
 	$('#poetry').bind('keyup click', function() {	
+		var poem = $('#poetry').val();
+	 	var cursorPosition = getCursorPosition();
+                socket.emit('new message', { poem: poem, cursorPosition: cursorPosition });
+	});
+
+        socket.on('typing', function (data) {
 		if (updatesEnabled) {
-			draw();
+			draw(data.poem, data.cursorPosition);
 		}
 	});
+        
 
 	$('#finish').bind('click', function() {
 		$(".poem_word").fadeTo(1800, 1.0);
 	});
+
+        $('#hideui').bind('click', function() {
+                $(".div-left").hide();
+        });
 
 });
