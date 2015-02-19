@@ -12,21 +12,27 @@ $(document).ready(function() {
 	}
 
 	function draw(poem, cursorPosition) {
-	    var contentChanged = previousText != poem;
+		if (poem == undefined) {
+			return;
+		}
+
+		var contentChanged = previousText != poem;
       	
-        $('#displayarea').empty();
-      	var words = poem.match(/[ \t]+|\S+|\n/g);
-      	if (words == undefined) { 
-      		return;
-      	}
-      	var numWords = words.length;
-      	var cursorInRealWord = false;
+		var words = poem.match(/[ \t]+|\S+|\n/g);
+		if (words == undefined) { 
+			return;
+      		}
+		
+		var numWords = words.length;
+		var cursorInRealWord = false;
+
+		$('#displayarea').empty();
 
 		var lastDirtyWord = dirtyWord;
-      	var currentPosition = 0;
-      	for (var i = 0; i < numWords; i++) {
-      		var word = words[i];
-      		var cursorInWord = currentPosition <= cursorPosition && currentPosition + word.length >= cursorPosition;
+      		var currentPosition = 0;
+		for (var i = 0; i < numWords; i++) {
+		var word = words[i];
+		var cursorInWord = currentPosition <= cursorPosition && currentPosition + word.length >= cursorPosition;
       		currentPosition += word.length;
 
       		if (word == "\n") {
@@ -106,6 +112,7 @@ $(document).ready(function() {
 	});
 
         $('#hideui').bind('click', function() {
+		$(".div-right").css({ width: "100%", margin: "2em", float: "none", position: "static" });
                 $(".div-left").hide();
         });
 
