@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+	<style>
+  		body { font-family: "Special Elite"; }
+  		html, body { width: 100%; height: 100%; margin: 0;}
+  		canvas { -webkit-transform: translate3d(0, 0, 0); }
+	</style>
+	<script>
+	function drawTextRotated(str, x, y, theta) {
+		// estimate line height
+		var lineHeight = 1.2 * window.context.measureText('m').width;
+
+		context.save();
+		context.translate(x, y);
+		context.rotate(theta);
+		context.textAlign = "center";
+		context.fillText(str, 0, lineHeight / 2);
+		context.restore();
+	}
+	
+	window.word = "$";
+	// window.word = "..-.!"
+
+	function init() {
+		var canvas = document.getElementById('theCanvas');
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		window.context = canvas.getContext('2d');
+		window.context.font = "24px Special";
+		window.context.translate(canvas.width / 2, canvas.height / 2);
+	}
+
+	function clear(context) {
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
+		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+		context.restore();
+	}
+	function draw(time) {
+		var context = window.context;
+		clear(context);
+
+		for (var ring = 0; ring < 30; ring++) {
+			var radius = ring * 10 + 20;
+			var N = 6 + 4 * ring;
+			var offset = (Math.PI / 12 + time/300000) * ring;  
+			for (var theta = offset; theta < 2 * Math.PI + offset; theta += 2 * Math.PI / N) {
+				var x = radius * Math.sin(theta);
+				var y = radius * Math.cos(theta);
+				drawTextRotated(window.word, x, y, -theta);
+			}
+		}
+		window.requestAnimationFrame(draw);
+	}
+
+	$(document).ready(function() {
+		init();
+    	window.requestAnimationFrame(draw);
+	});
+	</script>
+</head>
+<body>
+
+<canvas id="theCanvas">
+</canvas>
+
+</body>
+</html>
