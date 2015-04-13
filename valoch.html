@@ -10,7 +10,51 @@
   		canvas { -webkit-transform: translate3d(0, 0, 0); }
 	</style>
 	<script>
-	function drawTextRotated(str, x, y, theta) {
+
+	function TextCanvasBuffered(text, font, size, rotation) {
+		this.text = text;
+		this.font = font;
+		this.fontsize = size;
+		this.rotation = rotation;
+		this.canvas = document.createElement("canvas");
+		this.context = this.canvas.getContext("2d");
+		this.context.textAlign = "center";
+		this.dirty = true;
+	}
+
+	TextCanvasBuffered.prototype.draw = function(context, x, y) {
+		if (window.word != this.text) {
+			this.text = window.word;
+			this.dirty = true;
+		}
+		if (window.font != this.font) {
+			this.font = window.font;
+			this.dirty = true;
+		}
+		if (this.dirty) {
+			var margin = 8;
+			this.canvas.width = (this.fontsize * this.text.length) + margin;
+			this.canvas.height = (this.fontsize * this.text.length) + margin;
+			this.context.font = this.font;
+			drawTextRotated(this.context, this.text, this.canvas.width/2, this.canvas.height/2, this.rotation);
+			this.dirty = false;
+			//this.context.fillStyle = "red";
+			//this.context.fillRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+		}
+		context.drawImage(this.canvas, x, y);
+		//drawTextRotated(context, window.word, x, y, this.rotation);
+	}
+
+	var buffer = {};
+
+	function drawTextRotatedUsingBuffer(context, str, x, y, theta) {
+		if (buffer[theta] == undefined) {
+			buffer[theta] = new TextCanvasBuffered(str, context.font, 24, theta);
+		}
+		buffer[theta].draw(context, x, y);
+	}
+
+	function drawTextRotated(context, str, x, y, theta) {
 		// estimate line height
 		var lineHeight = 1.2 * window.context.measureText('m').width;
 
@@ -22,16 +66,13 @@
 		context.restore();
 	}
 	
-	window.word = "$";
-	// window.word = "..-.!"
-
 	function init() {
 		var canvas = document.getElementById('theCanvas');
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 
 		window.context = canvas.getContext('2d');
-		window.context.font = "24px Special";
+		window.context.font = window.font;
 		window.context.translate(canvas.width / 2, canvas.height / 2);
 	}
 
@@ -41,6 +82,7 @@
 		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 		context.restore();
 	}
+
 	function draw(time) {
 		var context = window.context;
 		clear(context);
@@ -48,18 +90,36 @@
 		for (var ring = 0; ring < 30; ring++) {
 			var radius = ring * 10 + 20;
 			var N = 6 + 4 * ring;
-			var offset = (Math.PI / 12 + time/300000) * ring;  
-			for (var theta = offset; theta < 2 * Math.PI + offset; theta += 2 * Math.PI / N) {
+			var offset = (Math.PI / 12 + time/120000) * ring % (2 * Math.PI);
+			for (var i = 0; i < N; i++) {
+				var theta = offset + 2 * Math.PI * i / N;
 				var x = radius * Math.sin(theta);
 				var y = radius * Math.cos(theta);
-				drawTextRotated(window.word, x, y, -theta);
+				drawTextRotatedUsingBuffer(window.context, window.word, x, y, -Math.round(theta * 200) / 200);
 			}
 		}
 		window.requestAnimationFrame(draw);
 	}
 
+	window.loadPreset = function (num) {
+		if (num == 1) {
+			window.word = "$";
+			window.font = "24px Special";
+		} else if (num == 2) {
+			window.word = "..-.!";
+			window.font = "24px Special";
+		} else if (num == 3) {
+			window.word = "zz";
+			window.font = "28px Times";
+		} else if (num == 4) {
+			window.word = "$.$";
+			window.font = "28px Times";
+		}
+	}
+
 	$(document).ready(function() {
 		init();
+		loadPreset(1);
     	window.requestAnimationFrame(draw);
 	});
 	</script>
