@@ -5,7 +5,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
 	<style>
-  		body { font-family: "Special Elite"; }
+  		body { font-family: "Special Elite"; background-color: black; color: white;}
   		html, body { width: 100%; height: 100%; margin: 0;}
   		canvas { -webkit-transform: translate3d(0, 0, 0); }
 	</style>
@@ -62,6 +62,7 @@
 		context.translate(x, y);
 		context.rotate(theta);
 		context.textAlign = "center";
+		context.fillStyle = "white";
 		context.fillText(str, 0, lineHeight / 2);
 		context.restore();
 	}
@@ -73,7 +74,7 @@
 
 		window.context = canvas.getContext('2d');
 		window.context.font = window.font;
-		window.context.translate(canvas.width / 2, canvas.height / 2);
+		window.context.translate(canvas.width / 2.7, canvas.height / 2.7 + 18);
 	}
 
 	function clear(context) {
@@ -89,8 +90,8 @@
 
 		if (window.pattern == "spiral") {
 			for (var ring = 0; ring < 30; ring++) {
-				var radius = ring * 10 + 20;
-				var N = 6 + 4 * ring;
+				var radius = (ring * 10 + 20) * 0.6;
+				var N = 2 + 4 * ring;
 				var offset = (Math.PI / 12 + time/120000) * ring % (2 * Math.PI);
 				for (var i = 0; i < N; i++) {
 					var theta = offset + 2 * Math.PI * i / N;
@@ -124,8 +125,8 @@
 
 	window.loadPreset = function (num) {
 		if (num == 1) {
-			window.word = "$";
-			window.font = "24px Special";
+			window.word = "$/";
+			window.font = "16px Special";
 		} else if (num == 2) {
 			window.word = "..-.!";
 			window.font = "24px Special";
@@ -138,9 +139,19 @@
 		}
 	}
 
+	$(window).keypress(function(event) {
+		if (event.which == 13) {
+			window.word = window.scratch;
+			window.scratch = "";
+		} else {
+			window.scratch += String.fromCharCode(event.which);
+		}
+	});
+
 	$(document).ready(function() {
 		init();
-		window.pattern = "wave";
+		window.pattern = "spiral";
+		window.scratch = "";
 		loadPreset(1);
     	window.requestAnimationFrame(draw);
 	});
