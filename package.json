@@ -3,15 +3,21 @@
   "description": "animate typing poetry for JAO",
   "version": "0.1.0",
   "homepage": "http://www.julieannotis.com/",
-  "author" : {
+  "author": {
     "name": "Michael Dewberry",
     "url": "http://dewb.org"
   },
   "licenses": [
-    { "type": "MIT" }
+    {
+      "type": "MIT"
+    }
   ],
   "engines": {
     "node": ">= 0.10.0"
+  },
+  "dependencies": {
+    "socket.io": "^1.3.4",
+    "express": "~4.11.2"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

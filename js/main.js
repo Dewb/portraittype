@@ -4,29 +4,35 @@ $(document).ready(function() {
 	var previousText = undefined;
 	var updatesEnabled = true;
 
+	var socket = io("http://universe.dewb.org", { 'path': '/socket.io' });
+
 	function getCursorPosition() {
 		var ta = $('#poetry');
 		return ta.prop("selectionDirection") == "backward" ? ta.prop("selectionStart") : ta.prop("selectionEnd");
 	}
 
-	function draw() {
-		var poem = $('#poetry').val();
-	    var cursorPosition = getCursorPosition();
-	    var contentChanged = previousText != poem;
+	function draw(poem, cursorPosition) {
+		if (poem == undefined) {
+			return;
+		}
+
+		var contentChanged = previousText != poem;
       	
-      	$('#displayarea').empty();
-      	var words = poem.match(/[ \t]+|\S+|\n/g);
-      	if (words == undefined) { 
-      		return;
-      	}
-      	var numWords = words.length;
-      	var cursorInRealWord = false;
+		var words = poem.match(/[ \t]+|\S+|\n/g);
+		if (words == undefined) { 
+			return;
+      		}
+		
+		var numWords = words.length;
+		var cursorInRealWord = false;
+
+		$('#displayarea').empty();
 
 		var lastDirtyWord = dirtyWord;
-      	var currentPosition = 0;
-      	for (var i = 0; i < numWords; i++) {
-      		var word = words[i];
-      		var cursorInWord = currentPosition <= cursorPosition && currentPosition + word.length >= cursorPosition;
+      		var currentPosition = 0;
+		for (var i = 0; i < numWords; i++) {
+		var word = words[i];
+		var cursorInWord = currentPosition <= cursorPosition && currentPosition + word.length >= cursorPosition;
       		currentPosition += word.length;
 
       		if (word == "\n") {
@@ -82,13 +88,35 @@ $(document).ready(function() {
 	}
 
 	$('#poetry').bind('keyup click', function() {	
+		var poem = $('#poetry').val();
+	 	var cursorPosition = getCursorPosition();
+                socket.emit('typing', { poem: poem, cursorPosition: cursorPosition });
 		if (updatesEnabled) {
-			draw();
+			draw(poem, cursorPosition);
+		}
+	});
+
+        socket.on('typing', function (data) {
+		if (updatesEnabled) {
+			draw(data.poem, data.cursorPosition);
 		}
 	});
 
 	$('#finish').bind('click', function() {
 		$(".poem_word").fadeTo(1800, 1.0);
+		socket.emit('finish');
 	});
 
+	socket.on('finish', function() {
+		$(".poem_word").fadeTo(1800, 1.0);
+	});
+
+        $('#hideui').bind('click', function() {
+		$(".div-right").css({ width: "100%", margin: "2em", float: "none", position: "static" });
+                $(".div-left").hide();
+        });
+
+	$('#clear').bind('click', function() {
+		$('#poetry').val('');		
+	});
 });

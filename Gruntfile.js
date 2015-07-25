@@ -18,19 +18,20 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
+          'node_modules/socket.io/node_modules/socket.io-client/socket.io.js',
           'bower_components/Lettering.js/jquery.lettering.js',
           'js/jquery.textillate.js',
           'bower_components/google-diff-match-patch-js/diff_match_patch.js',
           'js/main.js'
         ],
-        dest: 'dist/<%= pkg.name %>.js'
+        dest: 'poetry/dist/<%= pkg.name %>.js'
       },
       css: {
         src: [
           'bower_components/animate.css/animate.min.css',
           'css/main.css'
         ],
-        dest: 'dist/<%= pkg.name %>.css'
+        dest: 'poetry/dist/<%= pkg.name %>.css'
       }
     },
     uglify: {
@@ -39,7 +40,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: '<%= concat.js.dest %>',
-        dest: 'dist/<%= pkg.name %>.min.js'
+        dest: 'poetry/dist/<%= pkg.name %>.min.js'
       }
     },
     jshint: {
