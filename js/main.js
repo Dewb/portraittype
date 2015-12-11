@@ -91,16 +91,27 @@ $(document).ready(function() {
 		previousText = poem;
 	}
 
-	$('#poetry').bind('keyup click', function() {	
+	function updatePoemText() {
 		var poem = $('#poetry').val();
 	 	var cursorPosition = getCursorPosition();
                 socket.emit('typing', { poem: poem, cursorPosition: cursorPosition });
 		if (updatesEnabled) {
 			draw(poem, cursorPosition);
 		}
+	}
+
+    $('#poetry').bind('keyup', function(e) {	
+    	if (e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+    		return;
+    	}
+   		updatePoemText();
+    });
+
+	$('#poetry').bind('click', function() {	
+		updatePoemText();
 	});
 
-        socket.on('typing', function (data) {
+    socket.on('typing', function (data) {
 		if (updatesEnabled) {
 			draw(data.poem, data.cursorPosition);
 		}
