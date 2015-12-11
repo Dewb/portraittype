@@ -12,12 +12,12 @@
 	margin: 0;
 }
 
-#toolbar {
+.toolbar {
 	color: white;
 	margin: 10px;
 }
 
-#toolbar button {
+.toolbar button {
 	float: right;
 	margin-left: 8px;
 }
@@ -32,11 +32,12 @@
 }
 
 .poem_word {
-	color: cyan;
+	color: white;
+	text-shadow: 1px 1px #000000;
 }
 
 body {
 	background-color: black;
 	font-size: 16pt;
-	font-family: 'Special Elite', helvetica, sans;
+	font-family: 'Special Elite', courier, monospace;
 }

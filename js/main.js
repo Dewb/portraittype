@@ -29,10 +29,12 @@ $(document).ready(function() {
 		$('#displayarea').empty();
 
 		var lastDirtyWord = dirtyWord;
-      		var currentPosition = 0;
+      	var currentPosition = 0;
+		
 		for (var i = 0; i < numWords; i++) {
-		var word = words[i];
-		var cursorInWord = currentPosition <= cursorPosition && currentPosition + word.length >= cursorPosition;
+			var word = words[i];
+			var cursorInWord = currentPosition <= cursorPosition && currentPosition + word.length >= cursorPosition;
+      		var wordIsWhitespace = false;
       		currentPosition += word.length;
 
       		if (word == "\n") {
@@ -40,7 +42,9 @@ $(document).ready(function() {
 	      		continue;
       		}
       		if (/^\s+$/.test(word)) {
-      			continue;
+      			word = word.replace(/ /g, "&nbsp;");
+      			word = word.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp; ");
+      			wordIsWhitespace = true;
       		}
 
       		var drawWord = true;
@@ -58,14 +62,14 @@ $(document).ready(function() {
 			}
 
 			word = word.replace(/\*/g, " ");
-	      	wordSpan = $('<span />').addClass('poem_word').html(word + " ");
+	      	wordSpan = $('<span />').addClass('poem_word').html(word + (wordIsWhitespace ? "" : " "));
 			
 	      	if (word.length < 6) {
 	      		drawWord = false;
 	      		fadeWord = false;
 	      	}
 
-	      	if (!drawWord || fadeWord) {
+	      	if ((!drawWord || fadeWord) && !wordIsWhitespace) {
 	      		wordSpan.fadeTo(0, 0);
 			}
 
@@ -111,12 +115,16 @@ $(document).ready(function() {
 		$(".poem_word").fadeTo(1800, 1.0);
 	});
 
-        $('#hideui').bind('click', function() {
+    $('#hideui').bind('click', function() {
 		$(".div-right").css({ width: "100%", margin: "2em", float: "none", position: "static" });
-                $(".div-left").hide();
-        });
+        $(".div-left").hide();
+    });
 
 	$('#clear').bind('click', function() {
 		$('#poetry').val('');		
+	});
+
+	$('#chromakey').bind('click', function() {
+		$('body').css({"background-color": "#00ff00"});		
 	});
 });

@@ -18,7 +18,7 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
-          'node_modules/socket.io/node_modules/socket.io-client/socket.io.js',
+          'node_modules/socket.io-client/socket.io.js',
           'bower_components/Lettering.js/jquery.lettering.js',
           'js/jquery.textillate.js',
           'bower_components/google-diff-match-patch-js/diff_match_patch.js',
